@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `Clientes` (
   `nombre` VARCHAR(45) NOT NULL,
   `telefono` VARCHAR(15) NOT NULL,
   `direccion` VARCHAR(100) NOT NULL,
-  `ruta` INT NOT NULL,
+  `ruta` INT ,
   `descuento` INT NULL,
   PRIMARY KEY (`idClientes`),
   UNIQUE INDEX `DNI_UNIQUE` (`DNI` ASC) ,
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS `Clientes` (
   CONSTRAINT `idRuta`
     FOREIGN KEY (`ruta`)
     REFERENCES `rutas` (`idruta`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -79,8 +79,8 @@ DROP TABLE IF EXISTS `Facturas` ;
 
 CREATE TABLE IF NOT EXISTS `Facturas` (
   `idFactura` INT NOT NULL AUTO_INCREMENT,
-  `cliente` INT NOT NULL,
-  `comercial` INT NOT NULL,
+  `cliente` INT ,
+  `comercial` INT ,
   `fecha` DATE NOT NULL,
   PRIMARY KEY (`idFactura`),
   INDEX `idCliente_idx` (`cliente` ASC) ,
@@ -88,13 +88,13 @@ CREATE TABLE IF NOT EXISTS `Facturas` (
   CONSTRAINT `idCliente`
     FOREIGN KEY (`cliente`)
     REFERENCES `Clientes` (`idClientes`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
   CONSTRAINT `idComercial`
     FOREIGN KEY (`comercial`)
     REFERENCES `Comerciales` (`idComerciales`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -119,22 +119,23 @@ DROP TABLE IF EXISTS `pedidos` ;
 
 CREATE TABLE IF NOT EXISTS `pedidos` (
   `idpedidos` INT NOT NULL AUTO_INCREMENT,
-  `factura` INT NOT NULL,
+  `factura` INT ,
   `cantidad` INT NOT NULL,
-  `producto` INT NOT NULL,
+  `producto` INT ,
+  `precio` FLOAT NOT NULL,
   PRIMARY KEY (`idpedidos`),
   INDEX `idFactura_idx` (`factura` ASC) ,
   INDEX `idproducto_idx` (`producto` ASC) ,
   CONSTRAINT `idFactura`
     FOREIGN KEY (`factura`)
     REFERENCES `Facturas` (`idFactura`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
   CONSTRAINT `idproducto`
     FOREIGN KEY (`producto`)
     REFERENCES `productos` (`idproductos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
